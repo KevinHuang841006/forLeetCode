@@ -1,39 +1,47 @@
-#include <iostream>
-#include <algorithm>
-
-using namespace std;
-
-struct ListNode {
-     int val;
-     ListNode *next;
-     ListNode(int x) : val(x), next(NULL) {}
-};
-
-
-//Definition for a binary tree node.
-struct TreeNode {
-    int val;
-    TreeNode *left;
-    TreeNode *right;
-    TreeNode(int x) : val(x), left(NULL), right(NULL) {}
-};
-
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
 class Solution {
 public:
     TreeNode* sortedListToBST(ListNode* head) {
         
-        if(head==NULL)
-            return NULL;
         
+        //為NULL leaf的子點
+        
+        if(!head)
+            return NULL;
+        //一定要加！！！！！  為Leaf
+        if(!head->next){
+            
+            return new TreeNode(head->val);
+        }
+        
+        //不為Leaf
         
         ListNode* mid = findMid(head);
         
-        TreeNode* root;
-        root->val = mid->val;
+        
+        TreeNode* root=new TreeNode(mid->val);
+        //root->val = mid->val;
         
         root->left = sortedListToBST(head);
         root->right = sortedListToBST(mid->next);
         return root;
+        
     }
     
     ListNode* findMid(ListNode* head){
@@ -41,7 +49,7 @@ public:
         ListNode* fast = head;
         //slow=head;
         //fast=head;
-        ListNode* pre = slow;
+        ListNode* pre;
         
         /*
             1,2,  3   ,4,5 ,(null)
@@ -55,7 +63,7 @@ public:
                          f
         */
         
-        while(fast && fast->next!=NULL){ //小心fast ==NULL也要考慮進去
+        while(fast && fast->next){ //小心fast ==NULL也要考慮進去
             fast=fast->next->next;
             pre=slow;
             slow=slow->next;
@@ -67,23 +75,3 @@ public:
     
     
 };
-
-
-int main(){
-    
-    ListNode* t;
-    t->val=1;
-    for(int i=2;i<10;i++){
-        ListNode* tt;
-        tt->val=i;
-        tt->next=t;
-        t=tt;
-    }
-    
-    Solution ans;
-    TreeNode* aa = ans.sortedListToBST(t);
-    
-    
-    
-    return 0;
-}
